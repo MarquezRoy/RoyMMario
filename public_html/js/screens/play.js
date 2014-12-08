@@ -8,10 +8,11 @@ game.PlayScreen = me.ScreenObject.extend({
                 
                 me.levelDirector.loadLevel("Roylevel1");
                 
-                var player = me.pool.pull("Mario", 0, 420, {});
+                var player = me.pool.pull("Mario", 0, 200, {});
                 me.game.world.addChild(player, 3);
                 
                 me.input.bindKey(me.input.KEY.RIGHT,"right");
+                me.input.bindKey(me.input.KEY.LEFT,"left");
 
 		// add our HUD to the game world
 		this.HUD = new game.HUD.Container();

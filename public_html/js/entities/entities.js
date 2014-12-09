@@ -12,6 +12,11 @@ game.PlayerEntity = me.Entity.extend({
                 }
         }]);
     
+    this.body.update(delta);
+        me.collision.check(this, true, this.collideHandler.bind(this), true);
+        this._super(me.Entity, "update", [delta]);
+        return true;
+    
        this.renderable.addAnimation("idle", [3]);
        this.renderable.addAnimation("smallWalk", [9, 10, 11, 12, 13], 80);
        
@@ -32,7 +37,7 @@ game.PlayerEntity = me.Entity.extend({
         } else {
             this.body.vel.x = 0;
         }
-
+ 
         if (this.body.vel.x !== 0) {
             if (!this.renderable.isCurrentAnimation("smallWalk")) {
                 this.renderable.setCurrentAnimation("smallWalk");
@@ -41,12 +46,21 @@ game.PlayerEntity = me.Entity.extend({
             this.renderable.setCurrentAnimation("idle");
         }
 
-        this.body.update(delta);
-        this._super(me.Entity, "update", [delta]);
-        return true;
     }
 
 });
 
 
- 
+game.LevelTrigger = me.Entity.extend({
+    knit: function(x, y, settings) {
+     this._super(me.Entity, 'init', [x, y, settings]);
+     this.body.onCollision = this.onCollision.bind(this);
+     this.level = settings.level;
+    },
+    
+    onCollision: function(){
+        this.body.setCollisionMask(me.collision.types.NO_OBJECT);
+        me.levelDirector.loadLevel(this.level);
+    }
+    
+});
